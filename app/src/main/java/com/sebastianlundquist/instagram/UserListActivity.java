@@ -11,9 +11,12 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -78,7 +81,7 @@ public class UserListActivity extends AppCompatActivity {
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 				byte[] bytes = stream.toByteArray();
-				ParseFile file = new ParseFile("image.png", bytes);
+				ParseFile file = new ParseFile("image.png", bytes, "image/png");
 				ParseObject object = new ParseObject("Image");
 				object.put("image", file);
 				object.put("username", ParseUser.getCurrentUser().getUsername());
@@ -108,6 +111,15 @@ public class UserListActivity extends AppCompatActivity {
 		final ListView userList = findViewById(R.id.userList);
 		final ArrayList<String> usernames = new ArrayList<>();
 		final ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, usernames);
+
+		userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+				Intent intent = new Intent(getApplicationContext(), UserFeedActivity.class);
+				intent.putExtra("username", usernames.get(i));
+				startActivity(intent);
+			}
+		});
 
 		ParseQuery<ParseUser> query = ParseUser.getQuery();
 		query.whereNotEqualTo("username", ParseUser.getCurrentUser().getUsername());
