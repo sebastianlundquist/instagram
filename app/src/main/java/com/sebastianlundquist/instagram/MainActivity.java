@@ -1,14 +1,19 @@
 package com.sebastianlundquist.instagram;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import android.os.Bundle;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,15 +27,14 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnKeyListener {
 
 	boolean signUpModeActive = true;
 	TextView loginText;
+	EditText userInput;
+	EditText passwordInput;
 
 	public void signUp(View view) {
-		EditText userInput = findViewById(R.id.userInput);
-		EditText passwordInput = findViewById(R.id.passwordInput);
-
 		if (!userInput.getText().toString().matches("") && !passwordInput.getText().toString().matches("")) {
 			if (signUpModeActive) {
 				ParseUser user = new ParseUser();
@@ -75,6 +79,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		loginText = findViewById(R.id.loginText);
 		loginText.setOnClickListener(this);
 
+		userInput = findViewById(R.id.userInput);
+		passwordInput = findViewById(R.id.passwordInput);
+
+		ImageView logoView = findViewById(R.id.logoView);
+		ConstraintLayout backgroundLayout = findViewById(R.id.backgroundLayout);
+		logoView.setOnClickListener(this);
+		backgroundLayout.setOnClickListener(this);
+
+		passwordInput.setOnKeyListener(this);
+
 		ParseAnalytics.trackAppOpenedInBackground(getIntent());
 	}
 
@@ -93,5 +107,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				loginText.setText(R.string.or_login);
 			}
 		}
+		else if (view.getId() == R.id.logoView || view.getId() == R.id.backgroundLayout) {
+			InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+			inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+		}
+	}
+
+	@Override
+	public boolean onKey(View view, int i, KeyEvent keyEvent) {
+		if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_UP) {
+			signUp(view);
+		}
+		return false;
 	}
 }
