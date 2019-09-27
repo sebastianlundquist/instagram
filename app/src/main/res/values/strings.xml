@@ -7,4 +7,5 @@
     <string name="or_login">or Login</string>
     <string name="or_sign_up">or Sign Up</string>
     <string name="share">Share</string>
+    <string name="logout">Logout</string>
 </resources>

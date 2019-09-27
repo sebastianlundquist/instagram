@@ -58,6 +58,11 @@ public class UserListActivity extends AppCompatActivity {
 				getPhoto();
 			}
 		}
+		else if (item.getItemId() == R.id.logout) {
+			ParseUser.logOut();
+			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+			startActivity(intent);
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
