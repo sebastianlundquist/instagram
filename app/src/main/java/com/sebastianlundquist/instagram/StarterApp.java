@@ -26,24 +26,7 @@ public class StarterApp extends Application {
 				.build()
 		);
 
-		ParseObject object = new ParseObject("InstagramObject");
-		object.put("mycoolnumber", "123");
-		object.put("mycoolstring", "zebra");
-
-		object.saveInBackground(new SaveCallback() {
-			@Override
-			public void done(ParseException e) {
-				if (e == null) {
-					Log.i("Parse Result", "Success!");
-				}
-				else {
-					Log.w("Parse Result", "Failed: " + e.toString());
-					e.printStackTrace();
-				}
-			}
-		});
-
-		ParseUser.enableAutomaticUser();
+		//ParseUser.enableAutomaticUser();
 
 		ParseACL defaultACL = new ParseACL();
 		defaultACL.setPublicReadAccess(true);
