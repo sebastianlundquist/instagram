@@ -32,6 +32,7 @@ public class UserFeedActivity extends AppCompatActivity {
 		photoLayout = findViewById(R.id.photoLayout);
 		Intent intent = getIntent();
 		String username = intent.getStringExtra("username");
+		setTitle(username + "'s Photos");
 
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Image");
 		query.whereEqualTo("username", username);
