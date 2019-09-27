@@ -34,6 +34,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	EditText userInput;
 	EditText passwordInput;
 
+	public void showUserList() {
+		Intent intent = new Intent(getApplicationContext(), UserListActivity.class);
+		startActivity(intent);
+	}
+
 	public void signUp(View view) {
 		if (!userInput.getText().toString().matches("") && !passwordInput.getText().toString().matches("")) {
 			if (signUpModeActive) {
@@ -44,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 					@Override
 					public void done(ParseException e) {
 						if (e == null) {
-							Log.i("Signup", "Success");
+							showUserList();
 						}
 						else {
 							Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -57,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 					@Override
 					public void done(ParseUser user, ParseException e) {
 						if (user != null) {
-							Log.i("Login", "Login successful");
+							showUserList();
 						}
 						else {
 							Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -75,19 +80,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
 		loginText = findViewById(R.id.loginText);
 		loginText.setOnClickListener(this);
-
 		userInput = findViewById(R.id.userInput);
 		passwordInput = findViewById(R.id.passwordInput);
-
 		ImageView logoView = findViewById(R.id.logoView);
 		ConstraintLayout backgroundLayout = findViewById(R.id.backgroundLayout);
 		logoView.setOnClickListener(this);
 		backgroundLayout.setOnClickListener(this);
-
 		passwordInput.setOnKeyListener(this);
+
+		if (ParseUser.getCurrentUser() != null) {
+			showUserList();
+		}
 
 		ParseAnalytics.trackAppOpenedInBackground(getIntent());
 	}
