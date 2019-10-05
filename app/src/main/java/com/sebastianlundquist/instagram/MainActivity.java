@@ -6,25 +6,19 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.os.Bundle;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseAnalytics;
-import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnKeyListener {
@@ -39,21 +33,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		startActivity(intent);
 	}
 
-	public void signUp(View view) {
+	public void signUpOrLogin(View view) {
 		if (!userInput.getText().toString().matches("") && !passwordInput.getText().toString().matches("")) {
 			if (signUpModeActive) {
-				ParseUser user = new ParseUser();
-				user.setUsername(userInput.getText().toString());
-				user.setPassword(passwordInput.getText().toString());
-				user.signUpInBackground(new SignUpCallback() {
+				ParseUser newUser = new ParseUser();
+				newUser.setUsername(userInput.getText().toString());
+				newUser.setPassword(passwordInput.getText().toString());
+				newUser.signUpInBackground(new SignUpCallback() {
 					@Override
 					public void done(ParseException e) {
-						if (e == null) {
+						if (e == null)
 							showUserList();
-						}
-						else {
+						else
 							Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-						}
 					}
 				});
 			}
@@ -61,12 +53,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				ParseUser.logInInBackground(userInput.getText().toString(), passwordInput.getText().toString(), new LogInCallback() {
 					@Override
 					public void done(ParseUser user, ParseException e) {
-						if (user != null) {
+						if (user != null)
 							showUserList();
-						}
-						else {
+						else
 							Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-						}
 					}
 				});
 			}
@@ -90,9 +80,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		backgroundLayout.setOnClickListener(this);
 		passwordInput.setOnKeyListener(this);
 
-		if (ParseUser.getCurrentUser() != null) {
+		if (ParseUser.getCurrentUser() != null)
 			showUserList();
-		}
 
 		ParseAnalytics.trackAppOpenedInBackground(getIntent());
 	}
@@ -120,9 +109,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	@Override
 	public boolean onKey(View view, int i, KeyEvent keyEvent) {
-		if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_UP) {
-			signUp(view);
-		}
+		if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_UP)
+			signUpOrLogin(view);
 		return false;
 	}
 }

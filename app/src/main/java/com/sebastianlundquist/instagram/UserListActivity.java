@@ -51,12 +51,10 @@ public class UserListActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		if (item.getItemId() == R.id.share) {
-			if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+			if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
 				requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE }, 1);
-			}
-			else {
+			else
 				getPhoto();
-			}
 		}
 		else if (item.getItemId() == R.id.logout) {
 			ParseUser.logOut();
@@ -69,11 +67,9 @@ public class UserListActivity extends AppCompatActivity {
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		if (requestCode == 1) {
-			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+		if (requestCode == 1)
+			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
 				getPhoto();
-			}
-		}
 	}
 
 	@Override
@@ -93,12 +89,10 @@ public class UserListActivity extends AppCompatActivity {
 				object.saveInBackground(new SaveCallback() {
 					@Override
 					public void done(ParseException e) {
-						if (e == null) {
+						if (e == null)
 							Toast.makeText(UserListActivity.this, "Image has been shared!", Toast.LENGTH_SHORT).show();
-						}
-						else {
+						else
 							Toast.makeText(UserListActivity.this, "There was an issue uploading your image.", Toast.LENGTH_SHORT).show();
-						}
 					}
 				});
 			}
@@ -113,7 +107,7 @@ public class UserListActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_list);
 
-		setTitle("Active Users");
+		setTitle("Instagran: Users");
 
 		final ListView userList = findViewById(R.id.userList);
 		final ArrayList<String> usernames = new ArrayList<>();
