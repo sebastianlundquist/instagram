@@ -3,10 +3,11 @@ package com.sebastianlundquist.instagram;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,7 +33,7 @@ public class UserFeedActivity extends AppCompatActivity {
 		photoLayout = findViewById(R.id.photoLayout);
 		Intent intent = getIntent();
 		String username = intent.getStringExtra("username");
-		setTitle(username + "'s Photos");
+		setTitle("Instagran: " + username + "'s Photos");
 
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Image");
 		query.whereEqualTo("username", username);
@@ -54,6 +55,20 @@ public class UserFeedActivity extends AppCompatActivity {
 											ViewGroup.LayoutParams.WRAP_CONTENT
 									));
 									imageView.setImageBitmap(bitmap);
+									imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+									imageView.setAdjustViewBounds(true);
+									LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+											LinearLayout.LayoutParams.MATCH_PARENT,
+											LinearLayout.LayoutParams.WRAP_CONTENT
+									);
+									Resources r = getApplicationContext().getResources();
+									int px = (int) TypedValue.applyDimension(
+											TypedValue.COMPLEX_UNIT_DIP,
+											16,
+											r.getDisplayMetrics()
+									);
+									params.setMargins(0, 0, 0, px);
+									imageView.setLayoutParams(params);
 									photoLayout.addView(imageView);
 								}
 							}
